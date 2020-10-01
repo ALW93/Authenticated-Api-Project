@@ -1,16 +1,17 @@
 const express = require('express');
-const bcrypt = require("bcryptjs");
-const router = express.Router();
+const userRouter = express.Router();
 const { check } = require('express-validator');
-const { asyncHandler, handleValidationErrors } = require("../utils");
 const db = require("../db/models");
-const { User } = db;
+const { User, Tweet } = db;
+const bcrypt = require("bcryptjs");
+const { asyncHandler, handleValidationErrors } = require("../utils");
 const getUserToken = require("../auth");
 
-const validateUsername =
+const validateUsername = [
   check("username")
     .exists({ checkFalsy: true })
-    .withMessage("Please provide a username");
+    .withMessage("Please provide a username")
+];
 
 const validateEmailAndPassword = [
   check("email")
@@ -22,11 +23,14 @@ const validateEmailAndPassword = [
     .withMessage("Please provide a password."),
 ];
 
-router.get("/", (req, res) => {
-    res.json({ message: "test index root" });
-  });
+userRouter.get(
+    "/",
+    asyncHandler(async (req, res) => {
+        res.send("hello!");
+    })
+  );
 
-  router.post(
+  userRouter.post(
     "/",
     validateUsername,
     validateEmailAndPassword,
@@ -44,5 +48,4 @@ router.get("/", (req, res) => {
     })
   );
 
-
-module.exports = router;
+module.exports = userRouter;
