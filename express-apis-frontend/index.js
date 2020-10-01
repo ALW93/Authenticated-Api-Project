@@ -13,6 +13,25 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+// Route to Sign Up Page
+app.get("/sign-up", (req, res) => {
+  res.render("sign-up");
+});
+
+// Route to Log In Page
+app.get("/log-in", (req, res) => {
+  res.render("log-in");
+});
+
+// Route to Create a Tweet
+app.get("/create", (req, res) => {
+  res.render("create");
+});
+
+// Route to Profile
+app.get("/profile", (req, res) => {
+  res.render("profile");
+});
 // Define a port and start listening for connections.
 const port = 4000;
 

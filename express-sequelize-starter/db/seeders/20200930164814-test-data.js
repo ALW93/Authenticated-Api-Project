@@ -1,32 +1,59 @@
 "use strict";
 
+const faker = require("faker");
+const bcrypt = require("bcryptjs");
+
 module.exports = {
-  up: (queryInterface, Sequelize) => {
+  up: async (queryInterface, Sequelize) => {
+    const users = await queryInterface.bulkInsert(
+      "Users",
+      [
+        {
+          username: faker.internet.userName(),
+          email: faker.internet.email(),
+          hashedPassword: bcrypt.hashSync(faker.internet.password()),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          username: faker.internet.userName(),
+          email: faker.internet.email(),
+          hashedPassword: bcrypt.hashSync(faker.internet.password()),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ],
+      { returning: true }
+    );
+
     return queryInterface.bulkInsert(
       "Tweets",
       [
         {
-          message: "The Martian was awesome!",
+          message: faker.company.catchPhrase(),
           createdAt: new Date(),
           updatedAt: new Date(),
+          userId: users[0].id,
         },
         {
-          message: "Has anyone seen Ready Player One?",
+          message: faker.company.catchPhrase(),
           createdAt: new Date(),
           updatedAt: new Date(),
+          userId: users[0].id,
         },
         {
-          message:
-            "Harry Potter and the Sorcerer's Stone is the best out of all seven HP books :).",
+          message: faker.company.catchPhrase(),
           createdAt: new Date(),
           updatedAt: new Date(),
+          userId: users[1].id,
         },
       ],
       {}
     );
   },
 
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete("Tweets", null, {});
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.bulkDelete("Tweets", null, {});
+    return queryInterface.bulkDelete("Users", null, {});
   },
 };
