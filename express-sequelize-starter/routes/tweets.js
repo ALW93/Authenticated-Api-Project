@@ -1,12 +1,12 @@
 const express = require("express");
 const db = require("../db/models");
-const { check, validationResult } = require('express-validator');
+const { check } = require('express-validator');
 const { Tweet } = db;
 const router = express.Router();
 const cors = require('cors');
+const { asyncHandler, handleValidationErrors } = require("../utils");
 
-const asyncHandler = (handler) => (req, res, next) =>
-  handler(req, res, next).catch(next);
+
 
 const tweetNotFoundError = (id) => {
   const err = new Error(`Associated Tweet with ID ${id} could not be found!`);
@@ -23,21 +23,7 @@ const tweetValidations = [
     .withMessage('Tweet may not be more than 280 characters')
 ];
 
-const handleValidationErrors = (req, res, next) => {
-  const validationErrors = validationResult(req);
 
-  if (!validationErrors.isEmpty()) {
-    const errors = validationErrors.array().map(error => error.msg);
-    const err = Error("Bad request.");
-
-    err.errors = errors;
-    err.status = 400;
-    err.title = "Bad request.";
-    return next(err);
-  }
-
-  next();
-};
 
 // GET /tweets
 router.get(

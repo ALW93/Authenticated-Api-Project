@@ -4,6 +4,7 @@ const cors = require('cors');
 const { environment } = require("./config");
 const tweetsRouter = require("./routes/tweets");
 const indexRouter = require("./routes/index");
+const userRouter = require("./routes/users");
 const app = express();
 
 app.use(cors({ origin: true }));
@@ -12,6 +13,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use("/", indexRouter);
 app.use("/tweets", tweetsRouter);
+app.use("/users", userRouter);
 
 // Catch unhandled requests and forward to error handler.
 app.use((req, res, next) => {
